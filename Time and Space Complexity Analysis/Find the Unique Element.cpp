@@ -1,0 +1,9 @@
+int findUnique(int *arr, int n)
+{
+    int XOR = arr[0];
+    for (int i = 1; i < n; i++)
+    {
+        XOR = XOR ^ arr[i];
+    }
+    return XOR;
+}
