@@ -1,51 +1,41 @@
-#include <unordered_set>
-vector<int> longestConsecutiveIncreasingSequence(int *arr, int n)
-{
-    // Your Code goes here
-
-    unordered_set<int> elements;
-
-    for (int i = 0; i < n; i++)
+#include<bits/stdc++.h>
+vector<int> longestConsecutiveIncreasingSequence(int *arr, int n) {
+    unordered_map<int,bool> notTraversed;
+    unordered_map<int,int> elementToIndex;
+    for(int i=0;i<n;i++)notTraversed[arr[i]]=true;
+    for(int i=0;i<n;i++)elementToIndex[arr[i]]=i;
+    int maxLength=0;
+    int start=arr[0];
+    for(int i=0;i<n;i++)
     {
-        elements.insert(arr[i]); // Inserting elements into the hash
-    }
-
-    int maxLength = 0;
-    int startingElement;
-    int endingElement;
-
-    for (int i = 0; i < n; i++)
-    {
-        // We check if the current element is the starting element of the any
-        // subsequence
-        if (elements.find(arr[i] - 1) !=
-            elements
-                .end())
-        { // -> there is a consecutive smaller element in the hash
-            continue;
-        }
-        else
+        int length=1;
+        int current=arr[i];// 3
+        if(notTraversed[current])
         {
-            int next = arr[i];
-            while (elements.find(next) != elements.end())
+            while(notTraversed.find(current+1)!=notTraversed.end()) //going right....  
             {
-                next++;
+                length++; 
+                current++;
+                notTraversed[current]=false;
             }
-            if (maxLength < next - arr[i])
+            current=arr[i]; // index for going to left now
+            while(notTraversed.find(current-1)!=notTraversed.end())//going left.... 
             {
-                maxLength = next - arr[i];
-                startingElement = arr[i];
-                endingElement = next - 1;
+                length++;
+                current--;
+                notTraversed[current]=false;
             }
         }
+        notTraversed[arr[i]]=false;
+        if( length>maxLength || ( length==maxLength && ( i==0 || elementToIndex[current]<=elementToIndex[start])))
+        {
+                start=current;
+                maxLength=length;
+        }
     }
-
-    if (maxLength == 1)
-    {
-        return {startingElement};
-    }
-    else
-    {
-        return {startingElement, endingElement};
-    }
+    vector<int> ans;
+    ans.push_back(start);
+    if(maxLength>1)
+    ans.push_back(start+maxLength-1);
+    return ans;
 }
