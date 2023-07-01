@@ -2,20 +2,14 @@ void arrange(int *arr, int n)
 {
     // Write your code here
     int val = 1;
-    int k;
-    if (n % 2 == 0)
-        k = 0;
-    else
-        k = 1;
-    for (int i = 0; i < n / 2 + k; i++)
+    int idx=0;
+    for(int i=1;i<=n;i+=2)
     {
-        arr[i] = val;
-        val += 2;
+        arr[idx++]=i;
     }
-    val -= 1 + 2 * k;
-    for (int i = (n / 2) + k; i < n; i++)
+    if(n%2!=0)n--;
+    for(int j=n;j>=2;j-=2)
     {
-        arr[i] = val;
-        val -= 2;
+        arr[idx++]=j;
     }
 }
