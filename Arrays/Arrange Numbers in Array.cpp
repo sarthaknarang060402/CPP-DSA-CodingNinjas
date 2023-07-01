@@ -1,7 +1,5 @@
 void arrange(int *arr, int n)
 {
-    // Write your code here
-    int val = 1;
     int idx=0;
     for(int i=1;i<=n;i+=2)
     {
