@@ -1,37 +1,19 @@
 #include <stack>
-bool isBalanced(string expression)
+bool isBalanced(string s) 
 {
-    // Write your code here
-    bool ans = 0;
-    stack<char> s1;
-    for (int i = 0; expression[i] != '\0'; i++)
-    {
-        if (expression[i] == '[' || expression[i] == '(' || expression[i] == '{')
-            s1.push(expression[i]);
-    }
-
-    for (int i = 0; expression[i] != '\0'; i++)
-    {
-        if (expression[i] == ']' || expression[i] == ')' || expression[i] == '}')
-        {
-            if (s1.top() == '(' && expression[i] == ')')
-            {
-                ans = 1;
-                s1.pop();
-            }
-            else if (s1.top() == '{' && expression[i] == '}')
-            {
-                ans = 1;
-                s1.pop();
-            }
-            else if (s1.top() == '[' && expression[i] == ']')
-            {
-                ans = 1;
-                s1.pop();
-            }
+    stack<char>st;
+    int n=s.length();
+    for (int i=0;i<n;i++){
+        if ((s[i]=='{') || (s[i]=='(') || (s[i]=='[')){
+            st.push(s[i]);
         }
-        else
-            ans = 0;
+        else{
+            if(!st.empty()){
+                if((st.top()=='{'&&s[i]=='}')||(st.top()=='['&&s[i]==']')||(st.top()=='('&&s[i]==')'))st.pop();
+                else    return false;
+            }
+            else    return false;
+        }
     }
-    return s1.empty() && ans;
+    return st.empty();
 }
