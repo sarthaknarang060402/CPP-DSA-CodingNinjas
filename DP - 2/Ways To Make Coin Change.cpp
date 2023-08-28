@@ -1,37 +1,42 @@
-#include <algorithm>
-#include <vector>
+#include<bits/stdc++.h>
 
-int countWaysToMakeChange(int coins[], int n, int value)
+int countWaysToMakeChange(int denominations[],int n,int value)
 {
-    // Write your code here
-    vector<vector<long long>> dp(n + 1, vector<long long>(value + 1, 0));
-    for (int i = 0; i < n; ++i)
-    {
-        for (int j = 0; j < value + 1; ++j)
-        {
-            // base cases
-            if (coins[i] == 1)
-            {
-                dp[i + 1][j] = 1;
-                continue;
-            }
-            if (j == 0)
-            {
-                dp[i + 1][j] = 1;
-                continue;
-            }
+	vector<vector<int>> dp(n,vector<int>(value+1,0));
+	for(int i =0;i<=value;i++)
+	{
+		if(i%denominations[0]==0)dp[0][i]=1;
+	}
 
-            if (coins[i] > j)
-            {
-                dp[i + 1][j] = dp[i][j];
-            }
-            else
-            {
-                dp[i + 1][j] = dp[i][j] + dp[i + 1][j - coins[i]];
-                // if We include the coin[i] + if we don't include it
-            }
-        }
-    }
-
-    return dp[n][value];
+	for(int i = 1;i<n;i++)
+	{
+		for(int j=0;j<=value;j++)
+		{
+			int nottake = dp[i-1][j];
+			int take = 0;
+			if(j - denominations[i]>=0)take = dp[i][j - denominations[i]];
+			dp[i][j]=take + nottake;
+		}
+	}
+	return dp[n-1][value];
 }
+
+
+
+// int solve(int denominations[], int n,int idx, int value,vector<vector<int>> &dp)
+// {
+// 	if(idx ==0)
+// 	{
+// 		if(value%denominations[0]==0)return 1;
+// 	}
+// 	if(dp[idx][value]!=-1)return dp[idx][value];
+// 	int nottake = solve(denominations,n,idx-1,value,dp);
+// 	int take = 0;
+// 	if(value - denominations[idx]>=0)take = solve(denominations,n,idx,value-denominations[idx],dp);
+// 	return dp[idx][value]=take + nottake;
+// }
+// int countWaysToMakeChange(int denominations[], int n, int value)
+// {
+// 	vector<vector<int>> dp(n,vector<int>(value+1,-1));
+// 	return solve(denominations,n,n-1,value,dp);
+// }
