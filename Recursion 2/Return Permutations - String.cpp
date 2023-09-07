@@ -1,36 +1,21 @@
 #include <string>
 using namespace std;
-void permu(string input, string output[], string out, int &ind)
+void solve(string input,string out,string output[],int &idx)
 {
-    if (input.size() == 0)
+    if(input.empty())
     {
-        output[ind++] = out;
+        output[idx++]=out;
         return;
     }
-    string newout = out;
-    for (int i = 0; i < input.size(); i++)
+    int len = input.size();
+    for(int i=0;i<len;i++)
     {
-        if (i == 0)
-        {
-            out = newout + input[i];
-            permu(input.substr(1), output, out, ind);
-        }
-        else if (i == input.size() - 1)
-        {
-            out = newout + input[i];
-            permu(input.substr(0, i), output, out, ind);
-        }
-        else
-        {
-            out = newout + input[i];
-            permu(input.substr(0, i) + input.substr(i + 1, input.size() - i - 1), output, out, ind);
-        }
+        solve(input.substr(0,i)+input.substr(i+1),out+input[i],output,idx);
     }
 }
 int returnPermutations(string input, string output[])
 {
-    string out = "";
-    int ind = 0;
-    permu(input, output, out, ind);
-    return ind;
+	int idx = 0;
+	solve(input,"",output,idx);
+	return idx;
 }
