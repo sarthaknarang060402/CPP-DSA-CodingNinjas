@@ -1,35 +1,20 @@
 #include <iostream>
 #include <string>
 using namespace std;
-void permu(string input, string output)
+void solve(string input,string out)
 {
-    if (input.size() == 0)
+    if(input.empty())
     {
-        cout << output << endl;
+        cout<<out<<endl;
         return;
     }
-    string newout = output;
-    for (int i = 0; i < input.size(); i++)
+    int len = input.size();
+    for(int i=0;i<len;i++)
     {
-        if (i == 0)
-        {
-            output = newout + input[i];
-            permu(input.substr(1), output);
-        }
-        else if (i == input.size() - 1)
-        {
-            output = newout + input[i];
-            permu(input.substr(0, i), output);
-        }
-        else
-        {
-            output = newout + input[i];
-            permu(input.substr(0, i) + input.substr(i + 1, input.size() - i - 1), output);
-        }
+        solve(input.substr(0,i)+input.substr(i+1),out+input[i]);
     }
 }
 void printPermutations(string input)
 {
-    string output = "";
-    permu(input, output);
+    solve(input,"");
 }
