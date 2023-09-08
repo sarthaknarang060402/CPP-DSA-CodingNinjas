@@ -1,29 +1,45 @@
-#include <bits/stdc++.h>
-int tripletSum(int *A, int arr_size, int sum)
+int pairSum(int *arr, int start,int end, int num)
 {
-    int l, r;
-
-    sort(A, A + arr_size);
-    int count = 0;
-    for (int i = 0; i < arr_size - 2; i++)
-    {
-
-        // fix i
-        l = i + 1;
-
-        r = arr_size - 1;
-
-        while (l < r)
-        {
-            if (A[i] + A[l] + A[r] == sum)
-            {
-                count++;
-            }
-            else if (A[i] + A[l] + A[r] < sum)
-                l++;
-            else // A[i] + A[l] + A[r] > sum
-                r--;
-        }
-    }
-    return count;
+	int count = 0;
+	for(int i=start,j=end;i<j;)
+	{
+		if(arr[i]+arr[j]<num)i++;
+		else if(arr[i]+arr[j]>num)j--;
+		else // sum = num
+		{
+			if(arr[i]==arr[j])// means all in between are also same .. total combinations will be (n*n-1)/2
+			{
+				count += (j -i +1)*(j-i)/2;
+				break;
+			}
+			int lcount = 1;
+			while(i<j&&arr[i]==arr[i+1])
+			{
+				lcount++;
+				i++;
+			}
+			int rcount = 1;
+			while(i<j&&arr[j]==arr[j-1])
+			{
+				rcount++;
+				j--;
+			}
+			count+=lcount*rcount;
+			i++;
+            j--;
+		}
+	}
+	return count;
+}
+int tripletSum(int *arr, int n, int num)
+{
+	sort(arr,arr+n);
+	int count = 0;
+	for(int i=0;i<n;i++)
+	{	
+		int pairSumFor=num-arr[i];
+		int numPairs=pairSum(arr,(i+1),(n-1),pairSumFor);
+		count+=numPairs;
+	}
+	return count;
 }
