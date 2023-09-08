@@ -1,20 +1,8 @@
-int arrayRotateCheck(int *input, int size)
+int arrayRotateCheck(int *arr, int size)
 {
-    if (size == 0)
-        return 0;
-    int length = 1;
-    for (int i = 0; i < size; i++)
+    for(int i = 0;i<size -1;i++)
     {
-        if (input[i] < input[i + 1])
-        {
-            length++;
-        }
-        else
-        {
-            return length;
-        }
-        if (length == size)
-            return 0;
+        if(arr[i]>arr[i+1])return i+1;
     }
-    return length;
+    return 0;
 }
