@@ -8,7 +8,7 @@ int pairSum(int *arr, int n, int num)
 		else if(arr[i]+arr[j]>num)j--;
 		else // sum = num
 		{
-			if(arr[i]==arr[j])// means all in between are also same .. total combinartions will be (n*n-1)/2
+			if(arr[i]==arr[j])// means all in between are also same .. total combinations will be (n*n-1)/2
 			{
 				count += (j -i +1)*(j-i)/2;
 				break;
