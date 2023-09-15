@@ -1,135 +1,89 @@
-class BST
-{
-    // Define the data members
-    BinaryTreeNode<int> *root;
-
-public:
-    BST()
-    {
-        // Implement the Constructor
-        root = NULL;
+class BST {
+    BinaryTreeNode<int>* root;
+   public:
+    BST() { 
+        root==NULL;
     }
     ~BST()
     {
         delete root;
     }
-
-private:
-    void printHelper(BinaryTreeNode<int> *node)
-    {
-        if (node == NULL)
-            return;
-        cout << node->data << ":";
-        if (node->left)
-            cout << "L:" << node->left->data << ",";
-        if (node->right)
-            cout << "R:" << node->right->data;
-
-        cout << endl;
-        printHelper(node->left);
-        printHelper(node->right);
-    }
-
-    BinaryTreeNode<int> *insertHelper(BinaryTreeNode<int> *node, int data)
-    {
-        if (node == NULL)
+	/*----------------- Public Functions of BST -----------------*/
+    private:
+    BinaryTreeNode<int>* remove(BinaryTreeNode<int>* root,int data) { 
+        if(root==NULL)return root;
+        if(data > root->data)
         {
-            BinaryTreeNode<int> *newNode = new BinaryTreeNode<int>(data);
-            return newNode;
+            root->right = remove(root->right,data);
+            return root;
         }
-        if (node->data >= data)
-            node->left = insertHelper(node->left, data);
-        else
-            node->right = insertHelper(node->right, data);
-
-        return node;
-    }
-
-    bool searchHelper(BinaryTreeNode<int> *node, int data)
-    {
-        if (node == NULL)
-            return 0;
-        if (node->data == data)
-            return 1;
-        if (node->data > data)
-            return searchHelper(node->left, data);
-        else
-            return searchHelper(node->right, data);
-    }
-
-    BinaryTreeNode<int> *deleteData(int data, BinaryTreeNode<int> *node)
-    {
-        if (node == NULL)
-            return NULL;
-        if (data > node->data)
+        else if( data < root->data)
         {
-            node->right = deleteData(data, node->right);
-            return node;
+            root->left = remove(root->left,data);
+            return root;
         }
-        else if (data < node->data)
-        {
-            node->left = deleteData(data, node->left);
-            return node;
-        }
-        else
-        {
-            if (node->left == NULL && node->right == NULL)
+        else {
+            if(root->left == NULL && root->right == NULL)
             {
-                delete node;
+                delete root;
                 return NULL;
             }
-            else if (node->left == NULL)
+            else if(root->left==NULL)
             {
-                BinaryTreeNode<int> *temp = node->right;
-                node->right = NULL;
-                delete node;
+                BinaryTreeNode<int>* temp = root->right;
+                root->right = NULL;
+                delete root;
                 return temp;
             }
-            else if (node->right == NULL)
+            else if(root->right==NULL)
             {
-                BinaryTreeNode<int> *temp = node->left;
-                node->left = NULL;
-                delete node;
+                BinaryTreeNode<int>* temp = root->left;
+                root->left = NULL;
+                delete root;
                 return temp;
             }
-            else
-            {
-                BinaryTreeNode<int> *minNode = node->right;
-                while (minNode->left != NULL)
-                {
-                    minNode = minNode->left;
-                }
+            else{
+                BinaryTreeNode<int>* minNode= root->right;
+                while(minNode->left)minNode=minNode->left;
                 int rightMin = minNode->data;
-                node->data = rightMin;
-                node->right = deleteData(rightMin, node->right);
-                return node;
+                root->data = rightMin;
+                root->right = remove(root->right,rightMin);
+                return root;
             }
         }
     }
-
-    /*----------------- Public Functions of BST -----------------*/
-public:
-    void remove(int data)
-    {
-        // Implement the remove() function
-        root = deleteData(data, root);
+    void print(BinaryTreeNode<int>* root) { 
+        if(root==NULL)return;
+        cout<<root->data<<":";
+        if(root->left)cout<<"L:"<<root->left->data<<",";
+        if(root->right)cout<<"R:"<<root->right->data;
+        cout<<endl;
+        print(root->left);
+        print(root->right);
     }
-
-    void print()
-    {
-        // Implement the print() function
-        printHelper(root);
+    BinaryTreeNode<int>* insert(BinaryTreeNode<int>* root,int data) { 
+        if(root==NULL)return new BinaryTreeNode<int>(data);
+        if(root->data<data)root->right = insert(root->right,data);
+        else  root->left = insert(root->left,data);
+        return root;
     }
-
-    void insert(int data)
-    {
-        // Implement the insert() function
-        root = insertHelper(root, data);
+    bool search(BinaryTreeNode<int>* root,int data) {
+		if(root==NULL)return false;
+        if(root->data==data)return true;
+        else if(root->data<data)return search(root->right,data);
+        else return search(root->left,data);
     }
-
-    bool search(int data)
-    {
-        // Implement the search() function
-        return searchHelper(root, data);
+    public:
+    void remove(int data) { 
+        root=remove(root,data);
+    }
+    void print() { 
+        print(root);
+    }
+    void insert(int data) { 
+        root=insert(root,data);
+    }
+    bool search(int data) {
+		return search(root,data);
     }
 };
