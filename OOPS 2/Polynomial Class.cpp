@@ -93,162 +93,130 @@ int main()
 
 class Polynomial
 {
-
 public:
     int *degCoeff;
-    int capacity;
+    int cap;
+
     Polynomial()
     {
-        this->capacity = 5;
-        this->degCoeff = new int[capacity];
-
-        for (int i = 0; i < capacity; i++)
+        cap = 5;
+        degCoeff = new int[cap];
+        for (int i = 0; i < cap; i++)
         {
-            this->degCoeff[i] = 0;
+            degCoeff[i] = 0;
         }
     }
 
-    Polynomial(Polynomial const &P)
+    Polynomial(Polynomial const &p2) // custom copy constructor
     {
-        this->capacity = P.capacity;
-        this->degCoeff = new int[this->capacity];
-        for (int i = 0; i < capacity; i++)
+        cap = p2.cap;
+        degCoeff = new int[cap];
+        for (int i = 0; i < cap; i++)
         {
-            this->degCoeff[i] = P.degCoeff[i];
+            degCoeff[i] = p2.degCoeff[i];
         }
     }
-    void operator=(Polynomial const &P)
-    {
-        this->capacity = P.capacity;
-        this->degCoeff = new int[this->capacity];
-        for (int i = 0; i < this->capacity; i++)
-        {
-            this->degCoeff[i] = P.degCoeff[i];
-        }
-    }
-    void setCoefficient(int degree, int coefficient)
-    {
-        if (degree >= capacity)
-        {
 
-            int *newdegCoeff = new int[degree + 1];
-            for (int i = 0; i < degree + 1; i++)
+    void operator=(Polynomial const &p2)
+    {
+        cap = p2.cap;
+        degCoeff = new int[cap];
+        for (int i = 0; i < cap; i++)
+        {
+            degCoeff[i] = p2.degCoeff[i];
+        }
+    }
+
+    void setCoefficient(int deg, int coeff)
+    {
+        if (deg >= cap)
+        {
+            int *newdegCoeff = new int[deg + 1];
+            for (int i = 0; i < deg + 1; i++)
             {
                 newdegCoeff[i] = 0;
             }
-            for (int i = 0; i < capacity; i++)
+            for (int i = 0; i < cap; i++)
             {
                 newdegCoeff[i] = degCoeff[i];
             }
             delete[] degCoeff;
             degCoeff = newdegCoeff;
-            capacity = degree + 1;
+            cap = deg + 1;
         }
-        degCoeff[degree] = coefficient;
+        degCoeff[deg] = coeff;
     }
-    Polynomial operator+(Polynomial const &p)
+
+    Polynomial operator+(Polynomial const &p2)
     {
-        int h = max(this->capacity, (p.capacity));
-        int l = min(this->capacity, (p.capacity));
-        Polynomial p3;
-        p3.setCoefficient(h - 1, 0);
-
-        if (h == l)
-        {
-            for (int i = 0; i < h; i++)
-            {
-                p3.degCoeff[i] = this->degCoeff[i] + p.degCoeff[i];
-            }
-        }
-        else
-        {
-            for (int i = 0; i < l; i++)
-            {
-                p3.degCoeff[i] = this->degCoeff[i] + p.degCoeff[i];
-            }
-
-            if (p.capacity > this->capacity)
-            {
-                for (int i = l; i < h; i++)
-                {
-                    p3.degCoeff[i] = p.degCoeff[i];
-                }
-            }
-            if (p.capacity < this->capacity)
-            {
-                for (int i = l; i < h; i++)
-                {
-                    p3.degCoeff[i] = this->degCoeff[i];
-                }
-            }
-        }
-        return p3;
-    }
-    Polynomial operator-(Polynomial const &p)
-    {
-        int h = max(this->capacity, (p.capacity));
-        int l = min(this->capacity, (p.capacity));
-        Polynomial p3;
-        p3.setCoefficient(h - 1, 0);
-
-        if (h == l)
-        {
-            for (int i = 0; i < h; i++)
-            {
-                p3.degCoeff[i] = this->degCoeff[i] - p.degCoeff[i];
-            }
-        }
-        else
-        {
-            for (int i = 0; i < l; i++)
-            {
-                p3.degCoeff[i] = this->degCoeff[i] - p.degCoeff[i];
-            }
-
-            if (p.capacity > this->capacity)
-            {
-                for (int i = l; i < h; i++)
-                {
-                    p3.degCoeff[i] = -p.degCoeff[i];
-                }
-            }
-            if (p.capacity < this->capacity)
-            {
-                for (int i = l; i < h; i++)
-                {
-                    p3.degCoeff[i] = this->degCoeff[i];
-                }
-            }
-        }
-        return p3;
-    }
-    Polynomial operator*(Polynomial const &p)
-    {
-        Polynomial p3;
-        p3.setCoefficient(((this->capacity - 1) * (p.capacity)), 0);
-        Polynomial temp;
-        temp.setCoefficient(((this->capacity - 1) * (p.capacity)), 0);
+        Polynomial sum;
         int i = 0;
-        while (i < this->capacity)
+        while (i < cap && i < p2.cap)
         {
-            int j = 0;
-            while (j < p.capacity)
-            {
-                temp.degCoeff[i + j] = (this->degCoeff[i]) * (p.degCoeff[j]);
-                j++;
-            }
-            p3 = p3 + temp;
+            sum.setCoefficient(i, degCoeff[i] + p2.degCoeff[i]);
             i++;
         }
-        return p3;
+        while (i < cap)
+        {
+            sum.setCoefficient(i, degCoeff[i]);
+            i++;
+        }
+        while (i < p2.cap)
+        {
+            sum.setCoefficient(i, p2.degCoeff[i]);
+            i++;
+        }
+        return sum;
+    }
+
+    Polynomial operator-(Polynomial const &p2)
+    {
+        Polynomial sub;
+        int i = 0;
+        while (i < cap && i < p2.cap)
+        {
+            sub.setCoefficient(i, degCoeff[i] - p2.degCoeff[i]);
+            i++;
+        }
+        while (i < cap)
+        {
+            sub.setCoefficient(i, degCoeff[i]);
+            i++;
+        }
+        while (i < p2.cap)
+        {
+            sub.setCoefficient(i, -p2.degCoeff[i]);
+            i++;
+        }
+        return sub;
+    }
+
+    int getCoeff(int deg)
+    {
+        if (deg >= cap)
+            return 0;
+        return degCoeff[deg];
+    }
+    Polynomial operator*(Polynomial const &p2)
+    {
+        Polynomial mul;
+        for (int i = 0; i < cap; i++)
+        {
+            for (int j = 0; j < p2.cap; j++)
+            {
+                int deg = i + j;
+                int coeff = mul.getCoeff(deg) + degCoeff[i] * (p2.degCoeff[j]);
+                mul.setCoefficient(deg, coeff);
+            }
+        }
+        return mul;
     }
     void print()
     {
-        for (int i = 0; i < capacity; i++)
+        for (int i = 0; i < cap; i++)
         {
             if (degCoeff[i] != 0)
                 cout << degCoeff[i] << "x" << i << " ";
         }
-        cout << endl;
     }
 };
