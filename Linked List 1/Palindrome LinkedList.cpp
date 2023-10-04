@@ -1,9 +1,9 @@
 bool isPalindrome(Node *head)
 {
-    Node *slow = head;
+    	Node *slow = head;
 	Node * fast = head;
 	Node * prev = NULL;
-
+	
 	while(fast!=NULL&&fast->next!=NULL)
 	{
 		fast = fast->next->next;
@@ -12,9 +12,9 @@ bool isPalindrome(Node *head)
 		prev = slow;
 		slow = NXT;
 	}
-
+	
 	if(fast!=NULL)slow=slow->next;
-
+	
 	while(prev&&slow)
 	{
 		if(prev->data!=slow->data)return false;
