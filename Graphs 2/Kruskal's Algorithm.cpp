@@ -65,7 +65,7 @@ int main() {
     cin>>v>>e;
     edge* input = new edge[e];
     edge* output = new edge[v-1];
-    for(int i=0;i<v;i++)
+    for(int i=0;i<e;i++)
     {
         int s,d,w;
         cin>>s>>d>>w;
